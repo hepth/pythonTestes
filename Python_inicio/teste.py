@@ -55,7 +55,4 @@ sm.graphics.plot_partregress('renda','anosServico','aux',data=dados)
 
 #Graficos - ggplot ou seaborn?
 import seaborn as sns
-
-import ggplot as gp
 sns.barplot(x='individuo',y='renda',hue='carro',data=dados)
-gp.
