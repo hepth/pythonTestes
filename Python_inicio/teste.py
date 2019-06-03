@@ -35,5 +35,10 @@ sm.stats.anova_lm(modelo)
 print(modelo.summary())
 smf.glm('np.log(renda)~anosServico+C(carro)',data=dados,family=sm.families.Gamma()).fit()
 y = np.asarray(dados.loc[:,['renda']])
-x = np.asarray(dados.loc[:,['anosServico']])
+aux = [int(i) for i in np.array(dados.loc[:,['carro']])]
+dados['aux'] = aux
+x = np.asarray(dados.loc[:,['anosServico','aux']])
+x =sm.add_constant(x)
+#design = sm.tools.categorical(np.array(dados.loc[:,['carro']]))
 modelo2 = sm.GLM(y,x,data=dados,family=sm.families.Poisson()).fit()
+modelo2.summary()
