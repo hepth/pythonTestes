@@ -42,3 +42,20 @@ x =sm.add_constant(x)
 #design = sm.tools.categorical(np.array(dados.loc[:,['carro']]))
 modelo2 = sm.GLM(y,x,data=dados,family=sm.families.Poisson()).fit()
 modelo2.summary()
+sm.graphics.qqplot(y)
+sm.graphics.plot_partregress('renda','anosServico','aux',data=dados)
+
+##Precisamos estudar statsmodels.api a fundo. 
+##Encontrar bibliotecas com funcionalidades de estatística multivariada
+##Encontrar bibliotecas para estatística bayesiana, possivelmente coneção com openbugs ou jags. -> Stan?
+##Encontrar bibliotecas para ajuste de modelos autoregressivos para séries temporais, aka. arima, arch, etc.
+##Encontrar bibliotecas para ajuste de modelos espaciais, car, sar e demais modelos (consultar os livros do Vinicius) 
+
+
+
+#Graficos - ggplot ou seaborn?
+import seaborn as sns
+
+import ggplot as gp
+sns.barplot(x='individuo',y='renda',hue='carro',data=dados)
+gp.
