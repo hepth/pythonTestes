@@ -14,5 +14,26 @@ dados[dados['individuo']=='laura']
 dados = dados.set_index('individuo')
 dados[dados['carro']][['renda']]
 dados.loc['laura']
-dados.plot?
+dados['renda2'] = dados['renda']/1000
+dados.plot(x='individuo',y=['renda2','anosServico'],kind='bar')
+dados.plot(x='individuo',y='anosServico',kind='bar')
 
+#Trabalhando com numpy?
+import numpy as np
+a = np.array([1,2,3,4])
+b = np.array([(1,2,3),(4,5,6),(7,8,9)])
+np.random.normal(5,2,10)# =  rnorm(5,2,10)
+b.T #Transpose
+
+#Começando a trabalhar com "análises" de dados
+import statsmodels.api as sm
+import statsmodels.formula.api as smf
+teste2['anosServico'] = [15,10,20,15]
+dados = pd.DataFrame(teste2)
+modelo = smf.ols('renda~anosServico+C(carro)',data=dados).fit()
+sm.stats.anova_lm(modelo)
+print(modelo.summary())
+smf.glm('np.log(renda)~anosServico+C(carro)',data=dados,family=sm.families.Gamma()).fit()
+y = np.asarray(dados.loc[:,['renda']])
+x = np.asarray(dados.loc[:,['anosServico']])
+modelo2 = sm.GLM(y,x,data=dados,family=sm.families.Poisson()).fit()
