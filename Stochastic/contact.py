@@ -36,8 +36,13 @@ def evolucao(dados):
     canhao = np.array(0)
     for i in range(d1):
         for j in range(d2):  
-            dn,dl,do,ds = np.random.poisson(infecta*25,4)
-            heal = np.random.poisson(1)
+            dn,dl,do,ds = np.random.poisson(infecta*25,4)           
+            heal = np.random.poisson(1)  
+            if(dn>=50):dn=50
+            if(dl>=50):dl=50
+            if(do>=50):do=50
+            if(ds>=50):ds=50
+            if(heal>=50):heal=50
             doencaNorte[i,j,:] = np.append(np.random.exponential(infecta*25,dn),np.zeros([50-dn]))
             doencaLeste[i,j,:] = np.append(np.random.exponential(infecta*25,dl),np.zeros([50-dl]))
             doencaOeste[i,j,:] = np.append(np.random.exponential(infecta*25,do),np.zeros([50-do]))
@@ -48,7 +53,7 @@ def evolucao(dados):
             canhao = np.append(canhao,doencaOeste[i,j,:])
             canhao = np.append(canhao,doencaSul[i,j,:])
             canhao = np.append(canhao,curas[i,j,:])
-        canhao = canhao[1:canhao.shape[0]]
+    canhao = canhao[1:canhao.shape[0]]
     canhao.sort()
     k = 0
     for t in range(len(canhao)): 
@@ -57,13 +62,21 @@ def evolucao(dados):
                 for m in range(len(curas[i,j,:])):
                     if(curas[i,j,m]==canhao[t]): retorno[i,j,k]=0
                 for m in range(len(doencaNorte[i,j,:])):
-                    if(doencaNorte[i,j,m]==canhao[t] and retorno[i,j,k]==1): retorno[i,(j+1),k]=1
+                    if(doencaNorte[i,j,m]==canhao[t] and retorno[i,j,k]==1):
+                        if(j<=9): 
+                            retorno[i,(j+1),k]=1
                 for m in range(len(doencaLeste[i,j,:])):
-                    if(doencaLeste[i,j,m]==canhao[t] and retorno[i,j,k]==1): retorno[(i+1),j,k]=1
+                    if(doencaLeste[i,j,m]==canhao[t] and retorno[i,j,k]==1):
+                        if(i<=9):
+                            retorno[(i+1),j,k]=1
                 for m in range(len(doencaSul[i,j,:])):
-                    if(doencaSul[i,j,m]==canhao[t] and retorno[i,j,k]==1): retorno[i,(j-1),k]=1
+                    if(doencaSul[i,j,m]==canhao[t] and retorno[i,j,k]==1):
+                        if(j>=1):
+                            retorno[i,(j-1),k]=1
                 for m in range(len(doencaOeste[i,j,:])):
-                    if(doencaOeste[i,j,m]==canhao[t] and retorno[i,j,k]==1): retorno[(i-1),j,k]=1
+                    if(doencaOeste[i,j,m]==canhao[t] and retorno[i,j,k]==1):
+                        if(i>=1): 
+                            retorno[(i-1),j,k]=1
         if(canhao[t]>=k): k+=1
     return(retorno)    
         
