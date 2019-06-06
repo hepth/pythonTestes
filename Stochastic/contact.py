@@ -6,8 +6,8 @@ import seaborn as sb
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 #import time
-grade = np.zeros([51,51,25])
-grade[25,25,0] = 1
+grade = np.zeros([11,11,25])
+grade[5,5,0] = 1
 
 #def conversor(dados):
 #    d1 = dados.shape[0]
@@ -26,40 +26,63 @@ grade[25,25,0] = 1
 infecta = 5
 cura = 1
 def evolucao(dados):
+    retorno = dados.copy()
     d1,d2,d3 = dados.shape
-    doencaNorte = np.zeros([d1,d2,500])
+    doencaNorte = np.zeros([d1,d2,50])
     doencaLeste = doencaNorte.copy()
     doencaOeste = doencaNorte.copy()
     doencaSul = doencaNorte.copy()
     curas = doencaNorte.copy()
+    canhao = np.array(0)
     for i in range(d1):
         for j in range(d2):  
-            doencaNorte[i,j,:] = np.random.exponential(infecta*25,500)
-            doencaLeste[i,j,:] = np.random.exponential(infecta*25,500)
-            doencaOeste[i,j,:] = np.random.exponential(infecta*25,500)
-            doencaSul[i,j,:] = np.random.exponential(infecta*25,500)
-            curas[i,j,:] = np.random.exponential(cura*25,500)
-    for k in np.arange(1,d3,1):
+            dn,dl,do,ds = np.random.poisson(infecta*25,4)
+            heal = np.random.poisson(1)
+            doencaNorte[i,j,:] = np.append(np.random.exponential(infecta*25,dn),np.zeros([50-dn]))
+            doencaLeste[i,j,:] = np.append(np.random.exponential(infecta*25,dl),np.zeros([50-dl]))
+            doencaOeste[i,j,:] = np.append(np.random.exponential(infecta*25,do),np.zeros([50-do]))
+            doencaSul[i,j,:] = np.append(np.random.exponential(infecta*25,ds),np.zeros([50-ds]))
+            curas[i,j,:] = np.append(np.random.exponential(cura*25,heal),np.zeros([50-heal]))
+            canhao = np.append(canhao,doencaNorte[i,j,:])
+            canhao = np.append(canhao,doencaLeste[i,j,:])
+            canhao = np.append(canhao,doencaOeste[i,j,:])
+            canhao = np.append(canhao,doencaSul[i,j,:])
+            canhao = np.append(canhao,curas[i,j,:])
+        canhao = canhao[1:canhao.shape[0]]
+    canhao.sort()
+    k = 0
+    for t in range(len(canhao)): 
         for i in range(d1):
             for j in range(d2):
-                if(dados[i,j,k]==1):
-                    
-                    
+                for m in range(len(curas[i,j,:])):
+                    if(curas[i,j,m]==canhao[t]): retorno[i,j,k]=0
+                for m in range(len(doencaNorte[i,j,:])):
+                    if(doencaNorte[i,j,m]==canhao[t] and retorno[i,j,k]==1): retorno[i,(j+1),k]=1
+                for m in range(len(doencaLeste[i,j,:])):
+                    if(doencaLeste[i,j,m]==canhao[t] and retorno[i,j,k]==1): retorno[(i+1),j,k]=1
+                for m in range(len(doencaSul[i,j,:])):
+                    if(doencaSul[i,j,m]==canhao[t] and retorno[i,j,k]==1): retorno[i,(j-1),k]=1
+                for m in range(len(doencaOeste[i,j,:])):
+                    if(doencaOeste[i,j,m]==canhao[t] and retorno[i,j,k]==1): retorno[(i-1),j,k]=1
+        if(canhao[t]>=k): k+=1
+    return(retorno)    
+        
+    
         
         
     
 #np.random.exponential(1/5,5)
 
-
+testando = evolucao(grade)
 fig = plt.figure()
 ax = fig.add_subplot(1,1,1)
-aux = ax.matshow(grade[:,:,0])
+aux = ax.matshow(testando[:,:,0])
 
 def animacao(t):
    ax.clear()
-   ax.matshow(grade[:,:,t])
+   ax.matshow(testando[:,:,t])
    ax.set_title('instante: %d' % t)
-   if(t>=(grade.shape[2]-1)):
+   if(t>=(testando.shape[2]-1)):
         ax.set_title('fim')   
 
 ani = animation.FuncAnimation(fig,animacao,interval=250)
