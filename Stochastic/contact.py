@@ -24,12 +24,12 @@ grade[5,5,0] = 1
 #    return retorno
 
 #lala = conversor(grade)
-infecta = 4
+infecta = 1.25
 cura = 1
 def evolucao(dados):
     retorno = dados.copy()
     d1,d2,d3 = dados.shape
-    doencaNorte = np.zeros([d1,d2,50])
+    doencaNorte = np.zeros([d1,d2,500])
     doencaLeste = doencaNorte.copy()
     doencaOeste = doencaNorte.copy()
     doencaSul = doencaNorte.copy()
@@ -37,18 +37,18 @@ def evolucao(dados):
     canhao = np.array(0)
     for i in range(d1):
         for j in range(d2):  
-            dn,dl,do,ds = np.random.poisson(infecta*10,4)           
-            heal = np.random.poisson(10)  
-            if(dn>=50):dn=50
-            if(dl>=50):dl=50
-            if(do>=50):do=50
-            if(ds>=50):ds=50
-            if(heal>=50):heal=50
-            doencaNorte[i,j,:] = np.append(np.random.exponential(1/(infecta),dn),np.ones([50-dn])*500)
-            doencaLeste[i,j,:] = np.append(np.random.exponential(1/(infecta),dl),np.ones([50-dl])*500)
-            doencaOeste[i,j,:] = np.append(np.random.exponential(1/(infecta),do),np.ones([50-do])*500)
-            doencaSul[i,j,:] = np.append(np.random.exponential(1/(infecta),ds),np.ones([50-ds])*500)
-            curas[i,j,:] = np.append(np.random.exponential(1/(cura),heal),np.ones([50-heal])*500)
+            dn,dl,do,ds = np.random.poisson(infecta*100,4)           
+            heal = np.random.poisson(100)  
+            if(dn>=500):dn=500
+            if(dl>=500):dl=500
+            if(do>=500):do=500
+            if(ds>=500):ds=500
+            if(heal>=500):heal=500
+            doencaNorte[i,j,:] = np.append(np.random.exponential(1/(infecta),dn),np.ones([500-dn])*5000)
+            doencaLeste[i,j,:] = np.append(np.random.exponential(1/(infecta),dl),np.ones([500-dl])*5000)
+            doencaOeste[i,j,:] = np.append(np.random.exponential(1/(infecta),do),np.ones([500-do])*5000)
+            doencaSul[i,j,:] = np.append(np.random.exponential(1/(infecta),ds),np.ones([500-ds])*5000)
+            curas[i,j,:] = np.append(np.random.exponential(1/(cura),heal),np.ones([500-heal])*5000)
 #            doencaNorte[i,j,:].sort()
   #          doencaLeste[i,j,:].sort()
  #           doencaSul[i,j,:].sort()
@@ -70,7 +70,7 @@ def evolucao(dados):
     for t in range(len(canhao)): 
         for i in range(d1):
             for j in range(d2):
-                for m in range(50):
+                for m in range(500):
                     if(curas[i,j,m]==canhao[t]):
                         print('i = %d, j = %d, k= %d, t=%d,canhao = %.2f, Cura!'%(i,j,k,t,canhao[t]))
                         retorno[i,j,k]=0
@@ -123,21 +123,20 @@ frequency = 2500  # Set Frequency To 2500 Hertz
 duration = 1000  # Set Duration To 1000 ms == 1 second
 winsound.Beep(frequency, duration)
 #_________________________
-
-
+grade2 = np.zeros([grade.shape[0],grade.shape[1],grade.shape[2]+1])
+grade2[:,:,0] = grade[:,:,0]
+grade2[:,:,1:] = testando
+#testando = np.append(grade[:,:,0],testando)
 
 fig = plt.figure()
 ax = fig.add_subplot(1,1,1)
-aux = ax.matshow(testando[:,:,0])
-
+aux = ax.matshow(grade2[:,:,0])
 def animacao(t):
    ax.clear()
-   ax.matshow(testando[:,:,t])
+   ax.matshow(grade2[:,:,t])
    ax.set_title('instante: %d' % t)
-   if(t>=(testando.shape[2]-1)):
+   if(t>=(grade2.shape[2]-1)):
         ax.set_title('fim')   
 
 ani = animation.FuncAnimation(fig,animacao,interval=1000)
 plt.show()
-
-np.cumsum(np.arange(0,5,1))
