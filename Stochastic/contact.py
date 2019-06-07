@@ -24,7 +24,7 @@ grade[[1,2,5],[3,6,7],0] = 1
 #    return retorno
 
 #lala = conversor(grade)
-infecta = 2
+infecta = 4
 cura = 1
 def evolucao(dados):
     retorno = dados.copy()
@@ -37,18 +37,28 @@ def evolucao(dados):
     canhao = np.array(0)
     for i in range(d1):
         for j in range(d2):  
-            dn,dl,do,ds = np.random.poisson(infecta*25,4)           
-            heal = np.random.poisson(25)  
+            dn,dl,do,ds = np.random.poisson(infecta*10,4)           
+            heal = np.random.poisson(10)  
             if(dn>=50):dn=50
             if(dl>=50):dl=50
             if(do>=50):do=50
             if(ds>=50):ds=50
             if(heal>=50):heal=50
-            doencaNorte[i,j,:] = np.append(np.cumsum(np.random.exponential(1/(infecta),dn)),np.ones([50-dn])*500)
-            doencaLeste[i,j,:] = np.append(np.cumsum(np.random.exponential(1/(infecta),dl)),np.ones([50-dl])*500)
-            doencaOeste[i,j,:] = np.append(np.cumsum(np.random.exponential(1/(infecta),do)),np.ones([50-do])*500)
-            doencaSul[i,j,:] = np.append(np.cumsum(np.random.exponential(1/(infecta),ds)),np.ones([50-ds])*500)
-            curas[i,j,:] = np.append(np.cumsum(np.random.exponential(1/(cura),heal)),np.ones([50-heal])*500)
+            doencaNorte[i,j,:] = np.append(np.random.exponential(1/(infecta),dn),np.ones([50-dn])*500)
+            doencaLeste[i,j,:] = np.append(np.random.exponential(1/(infecta),dl),np.ones([50-dl])*500)
+            doencaOeste[i,j,:] = np.append(np.random.exponential(1/(infecta),do),np.ones([50-do])*500)
+            doencaSul[i,j,:] = np.append(np.random.exponential(1/(infecta),ds),np.ones([50-ds])*500)
+            curas[i,j,:] = np.append(np.random.exponential(1/(cura),heal),np.ones([50-heal])*500)
+#            doencaNorte[i,j,:].sort()
+  #          doencaLeste[i,j,:].sort()
+ #           doencaSul[i,j,:].sort()
+ #           doencaOeste[i,j,:].sort()
+ #           curas[i,j,:].sort()
+            doencaNorte[i,j,:] = np.cumsum(doencaNorte[i,j,:])
+            doencaLeste[i,j,:] = np.cumsum(doencaLeste[i,j,:])
+            doencaSul[i,j,:] = np.cumsum(doencaSul[i,j,:])
+            doencaOeste[i,j,:] = np.cumsum(doencaOeste[i,j,:])
+            curas[i,j,:] = np.cumsum(curas[i,j,:])
             canhao = np.append(canhao,doencaNorte[i,j,:])
             canhao = np.append(canhao,doencaLeste[i,j,:])
             canhao = np.append(canhao,doencaOeste[i,j,:])
@@ -60,32 +70,32 @@ def evolucao(dados):
     for t in range(len(canhao)): 
         for i in range(d1):
             for j in range(d2):
-                for m in range(len(curas[i,j,:])):
+                for m in range(50):
                     if(curas[i,j,m]==canhao[t]): 
                         retorno[i,j,k]=0
                         break
-                for m in range(len(doencaNorte[i,j,:])):
+#                for m in range(len(doencaNorte[i,j,:])):
                     if(doencaNorte[i,j,m]==canhao[t] and retorno[i,j,k]==1):
                         if(j<=9): 
                             retorno[i,(j+1),k]=1
                             break
-                for m in range(len(doencaLeste[i,j,:])):
+ #               for m in range(len(doencaLeste[i,j,:])):
                     if(doencaLeste[i,j,m]==canhao[t] and retorno[i,j,k]==1):
                         if(i<=9):
                             retorno[(i+1),j,k]=1
                             break
-                for m in range(len(doencaSul[i,j,:])):
+  #              for m in range(len(doencaSul[i,j,:])):
                     if(doencaSul[i,j,m]==canhao[t] and retorno[i,j,k]==1):
                         if(j>=1):
                             retorno[i,(j-1),k]=1
                             break
-                for m in range(len(doencaOeste[i,j,:])):
+   #             for m in range(len(doencaOeste[i,j,:])):
                     if(doencaOeste[i,j,m]==canhao[t] and retorno[i,j,k]==1):
                         if(i>=1): 
                             retorno[(i-1),j,k]=1
                             break
         if(canhao[t]>=k):
-            if(k<23):
+            if(k<=23):
                 k+=1
             else:
                 break
@@ -98,6 +108,16 @@ def evolucao(dados):
 #np.random.exponential(1/5,5)
 
 testando = evolucao(grade)
+
+#_________________________
+import winsound
+frequency = 2500  # Set Frequency To 2500 Hertz
+duration = 1000  # Set Duration To 1000 ms == 1 second
+winsound.Beep(frequency, duration)
+#_________________________
+
+
+
 fig = plt.figure()
 ax = fig.add_subplot(1,1,1)
 aux = ax.matshow(testando[:,:,0])
@@ -109,7 +129,7 @@ def animacao(t):
    if(t>=(testando.shape[2]-1)):
         ax.set_title('fim')   
 
-ani = animation.FuncAnimation(fig,animacao,interval=250)
+ani = animation.FuncAnimation(fig,animacao,interval=1000)
 plt.show()
 
 np.cumsum(np.arange(0,5,1))
