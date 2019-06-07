@@ -1,4 +1,3 @@
-#Ce programme tentera de créer une simulation du processus de contact proposé par Harris (1974).
 
 import numpy as np
 import seaborn as sb
@@ -24,12 +23,12 @@ grade[5,5,0] = 1
 #    return retorno
 
 #lala = conversor(grade)
-infecta = 1.25
+infecta = 0.5
 cura = 1
 def evolucao(dados):
     retorno = dados.copy()
     d1,d2,d3 = dados.shape
-    doencaNorte = np.zeros([d1,d2,500])
+    doencaNorte = np.zeros([d1,d2,150])
     doencaLeste = doencaNorte.copy()
     doencaOeste = doencaNorte.copy()
     doencaSul = doencaNorte.copy()
@@ -37,18 +36,18 @@ def evolucao(dados):
     canhao = np.array(0)
     for i in range(d1):
         for j in range(d2):  
-            dn,dl,do,ds = np.random.poisson(infecta*100,4)           
-            heal = np.random.poisson(100)  
-            if(dn>=500):dn=500
-            if(dl>=500):dl=500
-            if(do>=500):do=500
-            if(ds>=500):ds=500
-            if(heal>=500):heal=500
-            doencaNorte[i,j,:] = np.append(np.random.exponential(1/(infecta),dn),np.ones([500-dn])*5000)
-            doencaLeste[i,j,:] = np.append(np.random.exponential(1/(infecta),dl),np.ones([500-dl])*5000)
-            doencaOeste[i,j,:] = np.append(np.random.exponential(1/(infecta),do),np.ones([500-do])*5000)
-            doencaSul[i,j,:] = np.append(np.random.exponential(1/(infecta),ds),np.ones([500-ds])*5000)
-            curas[i,j,:] = np.append(np.random.exponential(1/(cura),heal),np.ones([500-heal])*5000)
+            dn,dl,do,ds = np.random.poisson(infecta*30,4)           
+            heal = np.random.poisson(30)  
+            if(dn>=150):dn=150
+            if(dl>=150):dl=150
+            if(do>=150):do=150
+            if(ds>=150):ds=150
+            if(heal>=150):heal=150
+            doencaNorte[i,j,:] = np.append(np.random.exponential(1/(infecta),dn),np.ones([150-dn])*5000)
+            doencaLeste[i,j,:] = np.append(np.random.exponential(1/(infecta),dl),np.ones([150-dl])*5000)
+            doencaOeste[i,j,:] = np.append(np.random.exponential(1/(infecta),do),np.ones([150-do])*5000)
+            doencaSul[i,j,:] = np.append(np.random.exponential(1/(infecta),ds),np.ones([150-ds])*5000)
+            curas[i,j,:] = np.append(np.random.exponential(1/(cura),heal),np.ones([150-heal])*5000)
 #            doencaNorte[i,j,:].sort()
   #          doencaLeste[i,j,:].sort()
  #           doencaSul[i,j,:].sort()
@@ -70,7 +69,7 @@ def evolucao(dados):
     for t in range(len(canhao)): 
         for i in range(d1):
             for j in range(d2):
-                for m in range(500):
+                for m in range(150):
                     if(curas[i,j,m]==canhao[t]):
                         print('i = %d, j = %d, k= %d, t=%d,canhao = %.2f, Cura!'%(i,j,k,t,canhao[t]))
                         retorno[i,j,k]=0
