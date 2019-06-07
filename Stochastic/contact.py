@@ -44,11 +44,11 @@ def evolucao(dados):
             if(do>=50):do=50
             if(ds>=50):ds=50
             if(heal>=50):heal=50
-            doencaNorte[i,j,:] = np.append(np.random.exponential(1/(infecta),dn),np.zeros([50-dn]))
-            doencaLeste[i,j,:] = np.append(np.random.exponential(1/(infecta),dl),np.zeros([50-dl]))
-            doencaOeste[i,j,:] = np.append(np.random.exponential(1/(infecta),do),np.zeros([50-do]))
-            doencaSul[i,j,:] = np.append(np.random.exponential(1/(infecta),ds),np.zeros([50-ds]))
-            curas[i,j,:] = np.append(np.random.exponential(1/(cura),heal),np.zeros([50-heal]))
+            doencaNorte[i,j,:] = np.append(np.cumsum(np.random.exponential(1/(infecta),dn)),np.zeros([50-dn]))
+            doencaLeste[i,j,:] = np.append(np.cumsum(np.random.exponential(1/(infecta),dl)),np.zeros([50-dl]))
+            doencaOeste[i,j,:] = np.append(np.cumsum(np.random.exponential(1/(infecta),do)),np.zeros([50-do]))
+            doencaSul[i,j,:] = np.append(np.cumsum(np.random.exponential(1/(infecta),ds)),np.zeros([50-ds]))
+            curas[i,j,:] = np.append(np.cumsum(np.random.exponential(1/(cura),heal)),np.zeros([50-heal]))
             canhao = np.append(canhao,doencaNorte[i,j,:])
             canhao = np.append(canhao,doencaLeste[i,j,:])
             canhao = np.append(canhao,doencaOeste[i,j,:])
@@ -105,3 +105,5 @@ def animacao(t):
 
 ani = animation.FuncAnimation(fig,animacao,interval=250)
 plt.show()
+
+np.cumsum(np.arange(0,5,1))
