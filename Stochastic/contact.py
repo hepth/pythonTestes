@@ -23,7 +23,7 @@ grade[5,5,0] = 1
 #    return retorno
 
 #lala = conversor(grade)
-infecta = 0.5
+infecta = 0.6
 cura = 1
 def evolucao(dados):
     retorno = dados.copy()
