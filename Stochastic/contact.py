@@ -7,8 +7,8 @@ import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 #import time
 grade = np.zeros([11,11,25])
-grade[[1,2,5],[3,6,7],0] = 1
-#grade[5,5,0] = 1
+#grade[[1,2,5],[3,6,7],0] = 1
+grade[5,5,0] = 1
 
 #def conversor(dados):
 #    d1 = dados.shape[0]
@@ -78,6 +78,8 @@ def evolucao(dados):
                     if(doencaNorte[i,j,m]==canhao[t] and retorno[i,j,k]==1):
                         if(j<=9): 
                             retorno[i,(j+1),k]=1
+                           # print('i = %d, j = %d, k= %d, t=%d,canhao = %.2f, Norte!'%(i,j,k,t,canhao[t]))
+
                             break
  #               for m in range(len(doencaLeste[i,j,:])):
                     if(doencaLeste[i,j,m]==canhao[t] and retorno[i,j,k]==1):
@@ -94,7 +96,7 @@ def evolucao(dados):
                         if(i>=1): 
                             retorno[(i-1),j,k]=1
                             break
-        if(canhao[t]>=k):
+        if(canhao[t]>=(k+1)):
             if(k<=23):
                 k+=1
             else:
