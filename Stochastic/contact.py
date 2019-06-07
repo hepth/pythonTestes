@@ -71,34 +71,40 @@ def evolucao(dados):
         for i in range(d1):
             for j in range(d2):
                 for m in range(50):
-                    if(curas[i,j,m]==canhao[t]): 
+                    if(curas[i,j,m]==canhao[t]):
+                        print('i = %d, j = %d, k= %d, t=%d,canhao = %.2f, Cura!'%(i,j,k,t,canhao[t]))
                         retorno[i,j,k]=0
                         break
 #                for m in range(len(doencaNorte[i,j,:])):
                     if(doencaNorte[i,j,m]==canhao[t] and retorno[i,j,k]==1):
                         if(j<=9): 
                             retorno[i,(j+1),k]=1
-                           # print('i = %d, j = %d, k= %d, t=%d,canhao = %.2f, Norte!'%(i,j,k,t,canhao[t]))
-
+                            print('i = %d, j = %d, k= %d, t=%d,canhao = %.2f, Norte!'%(i,j,k,t,canhao[t]))
                             break
  #               for m in range(len(doencaLeste[i,j,:])):
                     if(doencaLeste[i,j,m]==canhao[t] and retorno[i,j,k]==1):
                         if(i<=9):
+                            print('i = %d, j = %d, k= %d, t=%d,canhao = %.2f, Leste!'%(i,j,k,t,canhao[t]))
                             retorno[(i+1),j,k]=1
                             break
   #              for m in range(len(doencaSul[i,j,:])):
                     if(doencaSul[i,j,m]==canhao[t] and retorno[i,j,k]==1):
                         if(j>=1):
                             retorno[i,(j-1),k]=1
+                            print('i = %d, j = %d, k= %d, t=%d,canhao = %.2f, Sul!'%(i,j,k,t,canhao[t]))
                             break
    #             for m in range(len(doencaOeste[i,j,:])):
                     if(doencaOeste[i,j,m]==canhao[t] and retorno[i,j,k]==1):
                         if(i>=1): 
+                            print('i = %d, j = %d, k= %d, t=%d,canhao = %.2f, Oeste!'%(i,j,k,t,canhao[t]))
                             retorno[(i-1),j,k]=1
                             break
         if(canhao[t]>=(k+1)):
             if(k<=23):
                 k+=1
+                for i in range(d1):
+                    for j in range(d2):
+                        retorno[i,j,k] = retorno[i,j,(k-1)]
             else:
                 break
     return(retorno)    
