@@ -38,17 +38,17 @@ def evolucao(dados):
     for i in range(d1):
         for j in range(d2):  
             dn,dl,do,ds = np.random.poisson(infecta*25,4)           
-            heal = np.random.poisson(1)  
+            heal = np.random.poisson(25)  
             if(dn>=50):dn=50
             if(dl>=50):dl=50
             if(do>=50):do=50
             if(ds>=50):ds=50
             if(heal>=50):heal=50
-            doencaNorte[i,j,:] = np.append(np.cumsum(np.random.exponential(1/(infecta),dn)),np.zeros([50-dn]))
-            doencaLeste[i,j,:] = np.append(np.cumsum(np.random.exponential(1/(infecta),dl)),np.zeros([50-dl]))
-            doencaOeste[i,j,:] = np.append(np.cumsum(np.random.exponential(1/(infecta),do)),np.zeros([50-do]))
-            doencaSul[i,j,:] = np.append(np.cumsum(np.random.exponential(1/(infecta),ds)),np.zeros([50-ds]))
-            curas[i,j,:] = np.append(np.cumsum(np.random.exponential(1/(cura),heal)),np.zeros([50-heal]))
+            doencaNorte[i,j,:] = np.append(np.cumsum(np.random.exponential(1/(infecta),dn)),np.ones([50-dn])*500)
+            doencaLeste[i,j,:] = np.append(np.cumsum(np.random.exponential(1/(infecta),dl)),np.ones([50-dl])*500)
+            doencaOeste[i,j,:] = np.append(np.cumsum(np.random.exponential(1/(infecta),do)),np.ones([50-do])*500)
+            doencaSul[i,j,:] = np.append(np.cumsum(np.random.exponential(1/(infecta),ds)),np.ones([50-ds])*500)
+            curas[i,j,:] = np.append(np.cumsum(np.random.exponential(1/(cura),heal)),np.ones([50-heal])*500)
             canhao = np.append(canhao,doencaNorte[i,j,:])
             canhao = np.append(canhao,doencaLeste[i,j,:])
             canhao = np.append(canhao,doencaOeste[i,j,:])
@@ -61,23 +61,29 @@ def evolucao(dados):
         for i in range(d1):
             for j in range(d2):
                 for m in range(len(curas[i,j,:])):
-                    if(curas[i,j,m]==canhao[t]): retorno[i,j,k]=0
+                    if(curas[i,j,m]==canhao[t]): 
+                        retorno[i,j,k]=0
+                        break
                 for m in range(len(doencaNorte[i,j,:])):
                     if(doencaNorte[i,j,m]==canhao[t] and retorno[i,j,k]==1):
                         if(j<=9): 
                             retorno[i,(j+1),k]=1
+                            break
                 for m in range(len(doencaLeste[i,j,:])):
                     if(doencaLeste[i,j,m]==canhao[t] and retorno[i,j,k]==1):
                         if(i<=9):
                             retorno[(i+1),j,k]=1
+                            break
                 for m in range(len(doencaSul[i,j,:])):
                     if(doencaSul[i,j,m]==canhao[t] and retorno[i,j,k]==1):
                         if(j>=1):
                             retorno[i,(j-1),k]=1
+                            break
                 for m in range(len(doencaOeste[i,j,:])):
                     if(doencaOeste[i,j,m]==canhao[t] and retorno[i,j,k]==1):
                         if(i>=1): 
                             retorno[(i-1),j,k]=1
+                            break
         if(canhao[t]>=k):
             if(k<23):
                 k+=1
