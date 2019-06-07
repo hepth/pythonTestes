@@ -7,7 +7,8 @@ import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 #import time
 grade = np.zeros([11,11,25])
-grade[5,5,0] = 1
+grade[[1,2,5],[3,6,7],0] = 1
+#grade[5,5,0] = 1
 
 #def conversor(dados):
 #    d1 = dados.shape[0]
@@ -23,7 +24,7 @@ grade[5,5,0] = 1
 #    return retorno
 
 #lala = conversor(grade)
-infecta = 5
+infecta = 2
 cura = 1
 def evolucao(dados):
     retorno = dados.copy()
@@ -43,11 +44,11 @@ def evolucao(dados):
             if(do>=50):do=50
             if(ds>=50):ds=50
             if(heal>=50):heal=50
-            doencaNorte[i,j,:] = np.append(np.random.exponential(infecta*25,dn),np.zeros([50-dn]))
-            doencaLeste[i,j,:] = np.append(np.random.exponential(infecta*25,dl),np.zeros([50-dl]))
-            doencaOeste[i,j,:] = np.append(np.random.exponential(infecta*25,do),np.zeros([50-do]))
-            doencaSul[i,j,:] = np.append(np.random.exponential(infecta*25,ds),np.zeros([50-ds]))
-            curas[i,j,:] = np.append(np.random.exponential(cura*25,heal),np.zeros([50-heal]))
+            doencaNorte[i,j,:] = np.append(np.random.exponential(1/(infecta),dn),np.zeros([50-dn]))
+            doencaLeste[i,j,:] = np.append(np.random.exponential(1/(infecta),dl),np.zeros([50-dl]))
+            doencaOeste[i,j,:] = np.append(np.random.exponential(1/(infecta),do),np.zeros([50-do]))
+            doencaSul[i,j,:] = np.append(np.random.exponential(1/(infecta),ds),np.zeros([50-ds]))
+            curas[i,j,:] = np.append(np.random.exponential(1/(cura),heal),np.zeros([50-heal]))
             canhao = np.append(canhao,doencaNorte[i,j,:])
             canhao = np.append(canhao,doencaLeste[i,j,:])
             canhao = np.append(canhao,doencaOeste[i,j,:])
@@ -77,7 +78,11 @@ def evolucao(dados):
                     if(doencaOeste[i,j,m]==canhao[t] and retorno[i,j,k]==1):
                         if(i>=1): 
                             retorno[(i-1),j,k]=1
-        if(canhao[t]>=k): k+=1
+        if(canhao[t]>=k):
+            if(k<23):
+                k+=1
+            else:
+                break
     return(retorno)    
         
     
